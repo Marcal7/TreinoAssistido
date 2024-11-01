@@ -4,17 +4,26 @@ import pandas as pd
 import math
 import numpy as np
 import time
-import datetime
+from datetime import datetime
+
+# pip install openpyxl
+
 
 def verificar_descanso(inicio_descanso, descanso):
     return time.time() - inicio_descanso >= descanso
 
 count_rep = 0
 count_se = 0
+n_poli = 0
+s_poli = 0
+n_flex = 0
+s_flex = 0
+n_agacha = 0
+s_agacha = 0
 
 matricula = input("Insira a matrícula: ")
 
-'''if matricula == "1":
+if matricula == "1":
     n_poli = 3
     s_poli = 1
     check_poli = True
@@ -27,7 +36,7 @@ matricula = input("Insira a matrícula: ")
 
     n_agacha = 5
     s_agacha = 1
-    check_agacha = True'''
+    check_agacha = True
 
 descanso = int(input("Insira o tempo de descanso (em segundos): "))
 descanso_ativo = False
@@ -83,12 +92,6 @@ else:
 
 novo_reg = []
 
-'''try:
-  df = pd.read_csv("hist_treino{matricula}.csv")
-except FileNotFoundError:
-  df = pd.DataFrame(columns=['Data', 'Exercício', 'Número Série', 'Repetições'])
-'''
-
 # Inicializar o MediaPipe
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -99,9 +102,11 @@ iniciar = 'polichinelo'
 
 inic = 1
 
+webcan = True
+
 # Criar um objeto para a detecção de poses
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-    while cap.isOpened():
+    while cap.isOpened() and webcan is True:
         success, image = cap.read()
         if not success:
             print("Ignora efetuada pelo vídeo.")
@@ -154,7 +159,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
 
             if iniciar == 'polichinelo' and check_poli:
 
-                if distMO <= 10:
+                if distMO <= 20 and distPE >= 100:
 
                     if not descanso_ativo:
 
@@ -252,15 +257,37 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                         print(f"Descanso finalizado.\n")
                         descanso_ativo = False
 
-
-
         # Mostrar a imagem
         cv2.imshow('MediaPipe Pose', image)
+
+        if check_poli is False and check_poli is False and check_agacha is False:
+            print("TREINO FINALIZADO")
+            webcan = False
 
         # Parar o loop ao pressionar ESC
         if cv2.waitKey(5) & 0xFF == 27:
             break
 
+
 # Liberar a captura e fechar as janelas
 cap.release()
 cv2.destroyAllWindows()
+
+novo_reg.append({
+    "Matricula": matricula,
+    "Data": datetime.now().strftime("%Y-%m-%d"),
+    "Hora": datetime.now().strftime("%H:%M"),
+    "N polichinelos": n_poli,
+    "Série de polichinelos": s_poli,
+    "N flexão": n_flex,
+    "Série de flexão": s_flex,
+    "N agacha": n_agacha,
+    "Série de agachamento": s_agacha,
+    "Descanso": descanso
+})
+
+df = pd.DataFrame(novo_reg)
+df.to_excel(f"treino_{matricula}.xlsx", index=False)
+print("Registro feito")
+
+exit()

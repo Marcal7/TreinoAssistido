@@ -8,7 +8,7 @@ mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
 
 # Inicializar captura de vídeo
-cap = cv2.VideoCapture('dunk.mp4')
+cap = cv2.VideoCapture('../dunk.mp4')
 
 # Lista para armazenar os dados dos landmarks
 landmarks_data = []
@@ -67,3 +67,5 @@ landmarks_df = pd.DataFrame(landmarks_data)
 landmarks_df.to_csv('landmarks.csv', index=False)
 
 print("Dados dos landmarks extraídos e salvos com sucesso!")
+
+exit()

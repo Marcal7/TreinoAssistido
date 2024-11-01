@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 # Carregar os dados do arquivo CSV
-csv_file_path = 'landmarks.csv'
+csv_file_path = '../landmarks.csv'
 landmarks = pd.read_csv(csv_file_path)
 
 scene = canvas(background=vector(0, 1, 0))  # Cor verde
@@ -13,7 +13,7 @@ scene = canvas(background=vector(0, 1, 0))  # Cor verde
 "left_thumb", "right_thumb", "left_hip", "right_hip", "left_knee", "right_knee", "left_ankle", "right_ankle",
 "left_heel", "right_heel", "left_foot_index", "right_foot_index'''
 
-# Criar um "homem de palito" com articulações
+# Criar um "homem de palito"
 head = sphere(pos=vector(0, 0, 0), radius=0.1, color=vector(1, 0.8, 0.6))  # Cabeça
 #neck = cylinder(pos=vector(0, -0.1, 0), axis=vector(0, -0.1, 0), radius=0.03, color=vector(0, 0, 0))  # Pescoço
 left_shoulder = sphere(pos=vector(0, -0.2, 0.1), radius=0.02, color=vector(0, 0, 0))  # Ombro esquerdo
@@ -27,10 +27,10 @@ right_hand = sphere(pos=vector(0.3, -0.4, -0.1), radius=0.02, color=vector(0, 0,
 left_arm = cylinder(pos=left_shoulder.pos, axis=vector(-0.2, -0.1, 0), radius=0.025, color=vector(0, 0, 0))
 right_arm = cylinder(pos=right_shoulder.pos, axis=vector(0.2, -0.1, 0), radius=0.025, color=vector(0, 0, 0))
 
-# Criar a parte do corpo (mais "gorda")
+# Criar a parte do corpo
 body = cylinder(pos=vector(0, -0.3, 0), axis=vector(0, -0.4, 0), radius=0.04, color=vector(0, 0, 0))
 
-# Criar as pernas (mais "gordas")
+# Criar as pernas
 left_leg = cylinder(pos=body.pos, axis=vector(-0.1, -0.3, 0), radius=0.025, color=vector(0, 0, 0))
 right_leg = cylinder(pos=body.pos, axis=vector(0.1, -0.3, 0), radius=0.025, color=vector(0, 0, 0))
 
